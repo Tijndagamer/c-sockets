@@ -8,6 +8,6 @@ client:
 
 server:
 	$(CC) $(CFLAGS) -o server $(SRC)server.c
-all: client server
 clean:
 	$(RM) server client
+all: clean client server
