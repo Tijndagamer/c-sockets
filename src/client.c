@@ -36,8 +36,10 @@ int client(int port, char *host)
     s_addr.sin_port = htons(port);
     bcopy((char *)server->h_addr, (char *) &s_addr.sin_addr.s_addr, server->h_length);
 
+    printf("Connecting to %s:%d...", host, port);
     if (connect(sockfd, (struct sockaddr *) &s_addr, sizeof(s_addr)) < 0)
         error(-1, 0, "Could not connect to %s", host);
+    printf("succes!\n");
 
     char buffer[256];
     bzero(buffer, 256);
@@ -45,4 +47,6 @@ int client(int port, char *host)
     fgets(buffer, 255, stdin);
 
     n = write(sockfd, buffer, strlen(buffer));
+    close(sockfd);
+    printf("Connection closed\n");
 }

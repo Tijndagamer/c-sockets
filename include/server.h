@@ -16,6 +16,7 @@
 #include <string.h>
 #include <error.h>
 #include <unistd.h>
+#include <arpa/inet.h>
 
 int main(int argc, char *argv[]);
 int server(int port);

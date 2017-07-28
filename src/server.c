@@ -9,11 +9,12 @@
 
 int main(int argc, char *argv[])
 {
-    printf("%d\n", argc);
-    if (argc > 1)
+    if (argc > 1) {
+        printf("Starting server on port %s\n", argv[1]);
         server(atoi(argv[1]));
-    else
-        error(-1, 0, "Not enough arguments");
+    } else {
+        error(-1, 0, "Not enough arguments. Usage: %s port", argv[0]);
+    }
 }
 
 int server(int port)
@@ -46,10 +47,13 @@ int server(int port)
         conn_sockfd = accept(sockfd, (struct sockaddrr *) &cl_addr, &client_len);
         if (conn_sockfd < 0)
             error(-1, 0, "Error accepting connection");
+        // inet_ntoa converts the binary address to a user-presentable string
+        printf("Accepted connection from %s:%d\n", inet_ntoa(cl_addr.sin_addr), cl_addr.sin_port);
 
         n = read(conn_sockfd, buffer, 255);
         printf("%s", buffer);
 
         close(conn_sockfd);
+        printf("Connection closed\n");
     }
 }
