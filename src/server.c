@@ -7,16 +7,6 @@
 
 #include "server.h"
 
-int main(int argc, char *argv[])
-{
-    if (argc > 1) {
-        printf("Starting server on port %s\n", argv[1]);
-        server(atoi(argv[1]));
-    } else {
-        error(-1, 0, "Not enough arguments. Usage: %s port", argv[0]);
-    }
-}
-
 int server(int port)
 {
     int sockfd, conn_sockfd;
@@ -25,6 +15,7 @@ int server(int port)
     char buffer[256];
     struct sockaddr_in s_addr, cl_addr;
 
+    printf("Starting c-socket server...");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)

@@ -7,14 +7,6 @@
 
 #include "client.h"
 
-int main(int argc, char *argv[])
-{
-    if (argc > 2)
-        client(atoi(argv[1]), argv[2]);
-    else
-        error(-1, 0, "Not enough arguments. Usage: %s port hostname", argv[0]);
-}
-
 int client(int port, char *host)
 {
     int sockfd, n;
@@ -27,9 +19,11 @@ int client(int port, char *host)
         error(-1, 0, "Error opening socket");
 
     // Prepare server information
+    printf("Resolving hostname...");
     server = gethostbyname(host);
     if (server == NULL)
         error(-1, 0, "Could not resolve hostname, or no such IP exists");
+    printf("done.\n");
 
     bzero((struct sockaddr_in *) &s_addr, sizeof(s_addr));
     s_addr.sin_family = AF_INET;
@@ -39,14 +33,15 @@ int client(int port, char *host)
     printf("Connecting to %s:%d...", host, port);
     if (connect(sockfd, (struct sockaddr *) &s_addr, sizeof(s_addr)) < 0)
         error(-1, 0, "Could not connect to %s", host);
-    printf("succes!\n");
+    printf("done.\n");
 
     char buffer[256];
     bzero(buffer, 256);
     printf("> ");
     fgets(buffer, 255, stdin);
 
-    n = write(sockfd, buffer, strlen(buffer));
+    if (write(sockfd, buffer, strlen(buffer)) < 0)
+        error(-1, 0, "Error writing to socket");
     close(sockfd);
-    printf("Connection closed\n");
+    printf("Connection closed.\n");
 }

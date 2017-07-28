@@ -18,7 +18,6 @@
 #include <netdb.h>
 #include <unistd.h>
 
-int main(int argc, char *argv[]);
 int client(int port, char *host);
 
 #endif

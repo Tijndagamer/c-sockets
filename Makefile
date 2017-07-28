@@ -2,12 +2,24 @@ CC = gcc
 VPATH = src
 CFLAGS = -I include
 SRC = src/
+HEADERS = $(wildcard include/*.h)
+SRC = $(wildcard src/*.c)
+OBJ = c-sockets.o client.o server.o
+EXEC = c-sockets
 
-client:
-	$(CC) $(CFLAGS) -o client $(SRC)client.c
+all : ll
+%.o : %.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+ll : $(OBJ) $(HEADERS)
+	$(CC) -o $(EXEC) $(OBJ)
 
-server:
-	$(CC) $(CFLAGS) -o server $(SRC)server.c
-clean:
-	$(RM) server client
-all: clean client server
+debug :
+	$(CC) -o $(EXEC) $(CFLAGS) -g $(SRC)
+
+.PHONY : clean
+clean :
+	-rm $(EXEC) $(OBJ)
+
+run : ll
+	./c-sockets
+

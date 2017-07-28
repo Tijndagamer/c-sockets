@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-int main(int argc, char *argv[]);
 int server(int port);
 
 #endif
