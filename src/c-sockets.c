@@ -12,10 +12,11 @@
 int main(int argc, char *argv[])
 {
     int opt, port;
+    bool verbose = false;
     // TODO: This will probably cause issues later on, find a better solution.
     char host[256];
     
-    while((opt = getopt(argc, argv, "m:p:h:")) != -1) {
+    while((opt = getopt(argc, argv, "m:p:h:v")) != -1) {
         switch (opt) {
             case 'p':
                 port = atoi(optarg);
@@ -29,8 +30,11 @@ int main(int argc, char *argv[])
                 } else if (strcmp(optarg, "client") == 0) {
                     mode = CLIENT;
                 } else {
-                    mode = NONE;
+                    error(-1, 0, "Invalid mode specified. Specify server or client.");
                 }
+                break;
+            case 'v':
+                verbose = true;
                 break;
             default:
                 error(-1, 0, "Usage: %s -m mode -p port [-h host]", argv[0]);
@@ -39,10 +43,10 @@ int main(int argc, char *argv[])
 
     switch (mode) {
         case CLIENT:
-            client(port, host);
+            client(port, host, verbose);
             break;
         case SERVER:
-            server(port);
+            server(port, verbose);
             break;
         default:
             error(-1, 0, "Usage %s -m mode -p port [-h host]", argv[0]);

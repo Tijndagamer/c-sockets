@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-int server(int port)
+int server(int port, bool verbose)
 {
     int sockfd, conn_sockfd;
     int client_len;
@@ -15,11 +15,12 @@ int server(int port)
     char buffer[256];
     struct sockaddr_in s_addr, cl_addr;
 
-    printf("Starting c-socket server...");
+    printf("starting c-socket server...\n");
+    vprint(verbose, "opening socket...\n");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
-        error(-1, 0, "Error opening socket");
+        error(-1, 0, "error opening socket");
 
     bzero((char *) &s_addr, sizeof(s_addr));
     s_addr.sin_family = AF_INET;
@@ -27,24 +28,27 @@ int server(int port)
     s_addr.sin_addr.s_addr = INADDR_ANY;
 
     if (bind(sockfd, (struct sockaddr *) &s_addr, sizeof(s_addr)) < 0)
-        error(-1, 0, "Error binding name to socket");
+        error(-1, 0, "error binding name to socket");
 
+    vprint(verbose, "listening...\n");
     listen(sockfd, 5);
 
     while (1) {
         bzero(buffer, 256);
         client_len = sizeof(cl_addr);
 
+        vprint(verbose, "accepting connection...\n");
         conn_sockfd = accept(sockfd, (struct sockaddrr *) &cl_addr, &client_len);
         if (conn_sockfd < 0)
-            error(-1, 0, "Error accepting connection");
+            error(-1, 0, "error accepting connection");
         // inet_ntoa converts the binary address to a user-presentable string
-        printf("Accepted connection from %s:%d\n", inet_ntoa(cl_addr.sin_addr), cl_addr.sin_port);
+        printf("accepted connection from %s:%d\n", inet_ntoa(cl_addr.sin_addr),
+                cl_addr.sin_port);
 
         n = read(conn_sockfd, buffer, 255);
-        printf("%s", buffer);
+        printf("%s\n", buffer);
 
         close(conn_sockfd);
-        printf("Connection closed\n");
+        printf("connection closed\n");
     }
 }

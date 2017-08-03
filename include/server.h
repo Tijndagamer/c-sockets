@@ -17,7 +17,9 @@
 #include <error.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
+#include "vprint.h"
 
-int server(int port);
+int server(int port, bool verbose);
 
 #endif

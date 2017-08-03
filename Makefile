@@ -4,7 +4,7 @@ CFLAGS = -I include
 SRC = src/
 HEADERS = $(wildcard include/*.h)
 SRC = $(wildcard src/*.c)
-OBJ = c-sockets.o client.o server.o
+OBJ = c-sockets.o client.o server.o vprint.o
 EXEC = c-sockets
 
 all : ll
