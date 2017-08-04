@@ -13,6 +13,7 @@ int server(int port, bool verbose)
     int client_len;
     int n;
     char buffer[256];
+    char cl_ip[INET_ADDRSTRLEN];
     struct sockaddr_in s_addr, cl_addr;
 
     printf("starting c-socket server...\n");
@@ -41,9 +42,8 @@ int server(int port, bool verbose)
         conn_sockfd = accept(sockfd, (struct sockaddrr *) &cl_addr, &client_len);
         if (conn_sockfd < 0)
             error(-1, 0, "error accepting connection");
-        // inet_ntoa converts the binary address to a user-presentable string
-        printf("accepted connection from %s:%d\n", inet_ntoa(cl_addr.sin_addr),
-                cl_addr.sin_port);
+        inet_ntop(AF_INET, &(cl_addr.sin_addr), cl_ip, INET_ADDRSTRLEN);
+        printf("accepted connection from %s:%d\n", cl_ip, cl_addr.sin_port);
 
         n = read(conn_sockfd, buffer, 255);
         printf("%s\n", buffer);
