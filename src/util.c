@@ -5,7 +5,7 @@
  * Released under the MIT license
  */
 
-#include "vprint.h"
+#include "util.h"
 
 int vprint(bool v, const char *format, ...)
 {
@@ -15,4 +15,13 @@ int vprint(bool v, const char *format, ...)
         vprintf(format, args);
         va_end(args);
     }
+}
+
+void error(int status, const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+    exit(status);
 }

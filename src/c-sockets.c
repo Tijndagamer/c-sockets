@@ -11,7 +11,8 @@
 
 int main(int argc, char *argv[])
 {
-    int opt, port;
+    int opt;
+    char *port;
     bool verbose = false;
     // TODO: This will probably cause issues later on, find a better solution.
     char host[256];
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     while((opt = getopt(argc, argv, "m:p:h:v")) != -1) {
         switch (opt) {
             case 'p':
-                port = atoi(optarg);
+                port = optarg;
                 break;
             case 'h':
                 strcpy(host, optarg);

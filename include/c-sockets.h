@@ -9,7 +9,6 @@
 #define CSOCKETS_h
 
 #include <stdio.h>
-#include <error.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>

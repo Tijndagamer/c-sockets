@@ -14,12 +14,12 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#include <error.h>
 #include <netdb.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "vprint.h"
 
-int client(int port, char *host, bool verbose);
+#include "util.h"
+
+int client(char *port, char *host, bool verbose);
 
 #endif

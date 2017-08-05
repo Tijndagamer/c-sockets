@@ -10,8 +10,10 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 int vprint(bool v, const char *format, ...);
+void error(int status, const char *format, ...);
 
 #endif

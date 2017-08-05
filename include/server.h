@@ -14,12 +14,13 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#include <error.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
-#include "vprint.h"
+#include <netdb.h>
 
-int server(int port, bool verbose);
+#include "util.h"
+
+int server(char *port, bool verbose);
 
 #endif

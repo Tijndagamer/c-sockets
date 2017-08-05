@@ -7,33 +7,29 @@
 
 #include "client.h"
 
-int client(int port, char *host, bool verbose)
+int client(char *port, char *host, bool verbose)
 {
     int sockfd, n;
     struct sockaddr_in s_addr;
     struct hostent *server;
+    struct addrinfo hints, *res;
 
-    // Prepare socket
-    vprint(verbose, "opening socket\n");
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+
+    if (getaddrinfo(host, port, &hints, &res) != 0)
+        error(1, "Error resolving host information\n");
+
+    vprint(verbose, "Opening socket\n");
+    sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sockfd < 0)
-        error(-1, 0, "error opening socket");
+        error(1, "Error opening socket");
 
-    // Prepare server information
-    printf("Resolving hostname...");
-    server = gethostbyname(host);
-    if (server == NULL)
-        error(-1, 0, "could not resolve hostname, or no such IP exists");
-    printf("done.\n");
-
-    bzero((struct sockaddr_in *) &s_addr, sizeof(s_addr));
-    s_addr.sin_family = AF_INET;
-    s_addr.sin_port = htons(port);
-    bcopy((char *)server->h_addr, (char *) &s_addr.sin_addr.s_addr, server->h_length);
-
-    printf("connecting to %s:%d...", host, port);
-    if (connect(sockfd, (struct sockaddr *) &s_addr, sizeof(s_addr)) < 0)
-        error(-1, 0, "could not connect to %s", host);
+    printf("Connecting to %s:%s...", host, port);
+    if (connect(sockfd, res->ai_addr, res->ai_addrlen) < 0)
+        error(1, "Could not connect to %s", host);
     printf("done.\n");
 
     char buffer[256];
@@ -42,7 +38,7 @@ int client(int port, char *host, bool verbose)
     fgets(buffer, 255, stdin);
 
     if (write(sockfd, buffer, strlen(buffer)) < 0)
-        error(-1, 0, "error writing to socket");
+        error(1, "Error writing to socket");
     close(sockfd);
-    printf("connection closed.\n");
+    printf("Connection closed.\n");
 }
